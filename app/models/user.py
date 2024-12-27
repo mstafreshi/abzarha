@@ -12,7 +12,8 @@ class User(db.Model, UserMixin):
     username: so.Mapped[str] = so.mapped_column(sa.String(20), unique=True, index=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(80), unique=True, index=True)
     password_hash: so.Mapped[str] = so.mapped_column(sa.String(80))
-
+    posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

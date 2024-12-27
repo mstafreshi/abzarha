@@ -2,6 +2,31 @@
 
 {% block content %}
 
-    {{ title }}
+    <form method="post" action="" novalidate>
+
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.text(class='form-control', rows=4, placeholder=_('Write something ...')) }}
+            {% for error in form.text.errors %}
+                <span class='text-danger'>{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.submit(class='btn btn-primary') }}
+        </p>
+
+    </form>
+    
+    {% for post in paginated_posts.items %}
+        <p>{{ moment(post.created_at).format('LLL') }}</p>
+        <p dir=auto>{{ post.text }}</p>
+
+        {% if not loop.last %} <hr> {% endif %}
+
+    {% endfor %}
+
+    {% include('_utilities/_page_links.html') %}
     
 {% endblock %}
