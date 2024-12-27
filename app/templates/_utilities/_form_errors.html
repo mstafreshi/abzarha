@@ -1,0 +1,20 @@
+{% if form.errors | length %}
+    <div class="alert alert-danger">
+
+    <div class='fw-bold'> {{ _('Please check this errors') }}: </div> 
+
+    <ul>
+
+    {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+
+            <li class="text-danger"> {{ field }}: {{ error }} </li>
+            
+        {% endfor %}
+
+    {% endfor %}
+
+    </ul>
+
+    </div>
+{% endif %}
