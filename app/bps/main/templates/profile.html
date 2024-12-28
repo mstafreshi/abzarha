@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <table class="table table-bordered">
+        <tr>
+            <td>
+                <a href='{{ url_for('.profile', username=user.username)}}'><img src='{{ user.avatar() }}'></a>
+            </td>
+
+            <td>
+                {{ user.username }} 
+                    (
+                    {{ user.post_counts() }} {{ _('Posts') }} 
+                    {% if user.last_seen %}
+                        | {{ _('Last seen')}}: {{ moment(user.last_seen).fromNow()}}
+                    {% endif %}
+                    )
+                {% if user.about_me %} <br> {{ user.about_me }} {% endif %}
+                {% if current_user == user %}
+                    <br> <a href='{{ url_for('.edit_profile') }}'> {{ _('Edit profile') }} </a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% for post in paginated_posts.items %}        
+        {% include '_utilities/_post.html' %}
+    {% endfor %}
+
+    {% include('_utilities/_page_links.html') %}
+    
+{% endblock %}

@@ -10,3 +10,4 @@ MAIL_PASSWORD=
 
 APP_NAME="Abzarha"
 ADMINS="safari.tafreshi@gmail.com,sara.safari@gmail.com"
+PER_PAGE=10

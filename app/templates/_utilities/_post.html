@@ -1,0 +1,24 @@
+<table class="table table-bordered">
+    <tr>
+        <td>
+            <a href='{{ url_for('.profile', username=post.author.username)}}'><img src='{{ post.author.avatar() }}'></a>
+        </td>
+
+        <td>
+            {{ moment(post.created_at).format('LLL') }} <br>
+            {{ post.author.username }}
+            {% if post.author == current_user %}
+                <br>
+                <a href="{{ url_for('.edit_post', id=post.id) }}">{{ _('Edit') }}</a>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <p dir=auto>{{ post.text }}</p>
+        </td>
+    </tr>
+</table>
+
+   

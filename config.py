@@ -14,3 +14,4 @@ class Config:
 
     APP_NAME                = os.environ.get('APP_NAME')
     ADMINS                  = os.environ.get('ADMINS').split(",")
+    PER_PAGE                = int(os.environ.get('PER_PAGE') or 1)

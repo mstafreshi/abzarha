@@ -6,12 +6,17 @@ from flask_login import UserMixin
 import jwt
 from flask import current_app
 from time import time
+from hashlib import md5
+from typing import Optional
+from datetime import datetime, timezone
 
 class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(20), unique=True, index=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(80), unique=True, index=True)
     password_hash: so.Mapped[str] = so.mapped_column(sa.String(80))
+    about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(280))
+    last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
     
     def set_password(self, password):
@@ -35,6 +40,15 @@ class User(db.Model, UserMixin):
             return
 
         return db.session.get(User, int(id))
+
+    def avatar(self, size=64):
+        hash = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{hash}?s={size}&d=identicon'
+
+    def post_counts(self):
+        return db.session.scalar(
+            sa.select(sa.func.count()).select_from(self.posts.select().subquery())
+        )
 
 @login.user_loader
 def load_user(id):

@@ -1,7 +1,7 @@
 <div class="d-flex bd-highlight mb-3">
     {% if paginated_posts.has_next %}
         <div class="p-1 bd-highlight">
-        <a href="{{ url_for('.home', page=paginated_posts.next_num) }}">
+        <a href="{{ url_for(request.endpoint, page=paginated_posts.next_num, **request.view_args) }}">
             {{ _('Older posts') }}
         </a>
         </div>
@@ -9,7 +9,7 @@
 
     {% if paginated_posts.has_prev %}
         <div class="ms-auto p-1 bd-highlight">
-        <a href="{{ url_for('.home', page=paginated_posts.prev_num) }}">
+        <a href="{{ url_for(request.endpoint, page=paginated_posts.prev_num, **request.view_args) }}">
             {{ _('Newer posts') }}
         </a>
         </div>

@@ -19,12 +19,8 @@
 
     </form>
     
-    {% for post in paginated_posts.items %}
-        <p>{{ moment(post.created_at).format('LLL') }}</p>
-        <p dir=auto>{{ post.text }}</p>
-
-        {% if not loop.last %} <hr> {% endif %}
-
+    {% for post in paginated_posts.items %}        
+        {% include '_utilities/_post.html' %}
     {% endfor %}
 
     {% include('_utilities/_page_links.html') %}
