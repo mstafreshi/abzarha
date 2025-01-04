@@ -8,6 +8,7 @@ MAIL_USE_TLS=
 MAIL_USERNAME=
 MAIL_PASSWORD=
 
+DATABASE_URL="mysql://root:@localhost:3306/flask"
 APP_NAME="Abzarha"
 ADMINS="safari.tafreshi@gmail.com,sara.safari@gmail.com"
 PER_PAGE=10

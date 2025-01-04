@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY              = os.environ.get('SECRET_KEY') or 'afs$$12'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
 
     MAIL_SERVER             = os.environ.get('MAIL_SERVER')
     MAIL_PORT               = os.environ.get('MAIL_PORT')
