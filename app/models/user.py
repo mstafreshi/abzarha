@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(20), unique=True, index=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(80), unique=True, index=True)
-    password_hash: so.Mapped[str] = so.mapped_column(sa.String(80))
+    password_hash: so.Mapped[str] = so.mapped_column(sa.String(120))
     about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(280))
     last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
