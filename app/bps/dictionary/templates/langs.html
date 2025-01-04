@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% include '_utilities/_form_errors.html' %}
+
+    <form method="post" action="" novalidate class="mb-4">
+
+        {{ form.hidden_tag() }}
+        
+        <div class="row">
+            <div class="col"> 
+                {{ form.name(placeholder=_('Enter language name'), class='form-control') }}
+                {% for error in form.name.errors %}
+                    <span class="text-danger"> {{ error }} </span>
+                {% endfor %}
+
+            </div>
+
+            <div class="col-auto">
+                {{ form.submit(value=_('Add language'), class='btn btn-primary') }}
+            </div>
+        </div>
+
+    </form>
+
+
+    {% for lang in langs %}
+
+        {% if loop.first %}
+
+            <table class="table table-bordered">
+            <tr>
+                <td> </td>
+                <td> {{  _('Name') }} </td>
+                <td> </td>
+            </tr>
+
+        {% endif %}
+
+        <tr>
+            <td> {{ loop.index }} </td>
+            <td> <a href="{{ url_for('.words', lang=lang.id) }}">{{ lang.name }} </td>
+            <td> <a href="{{ url_for('.edit_lang', id=lang.id) }}"> {{ _('Edit') }} </a></td>
+        </tr>
+
+        {% if loop.last %}
+            </table>
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}

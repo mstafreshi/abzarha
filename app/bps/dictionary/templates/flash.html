@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for word in paginated.items %}
+        <div class="row">
+            <div class="col-6 h1 mb-5 text-center">
+                {{ word.word }}
+            </div>
+
+            <div class="col-6 h1 mb-5 text-center">
+                {{ word.pronunciation }}
+            </div>
+
+
+            <div class="col-12 p-5  fa-post text-center">
+                {{ word.meaning }}
+            </div>
+
+        {% if loop.last %}
+            </div>
+
+            <div class="mt-5">
+                {% include '_utilities/_page_links.html' %}
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}

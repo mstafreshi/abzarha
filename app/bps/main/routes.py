@@ -8,6 +8,7 @@ from app.models import Post, User
 from app.forms import EmptyForm
 import sqlalchemy as sa
 from datetime import datetime, timezone
+from langdetect import detect
 
 @bp.before_app_request
 def app_before_request():
@@ -25,6 +26,7 @@ def home():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(text=form.text.data)
+        post.lang_code = detect(post.text)
         post.author = current_user
         db.session.add(post)
         db.session.commit()
@@ -32,9 +34,9 @@ def home():
         return redirect(url_for('.home'))
 
     page = int(request.args.get('page', 1))    
-    paginated_posts = db.paginate(sa.select(Post).order_by(Post.id.desc()), page=page, per_page=current_app.config['PER_PAGE'])
+    paginated = db.paginate(sa.select(Post).order_by(Post.id.desc()), page=page, per_page=current_app.config['PER_PAGE'])
 
-    return render_template('home.html', title=_('Home'), form=form, paginated_posts=paginated_posts)
+    return render_template('home.html', title=_('Home'), form=form, paginated=paginated)
 
 @bp.route('/profile/<username>')
 def profile(username):
@@ -63,6 +65,7 @@ def edit_post(id):
     form = PostForm()
     if form.validate_on_submit():
         post.text = form.text.data
+        post.lang_code = detect(post.text)
         db.session.commit()
         flash(_('Post editted successfully.'))
         return redirect(url_for('.edit_post', id=post.id))

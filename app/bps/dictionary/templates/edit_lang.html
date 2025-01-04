@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% include '_utilities/_form_errors.html' %}
+
+    <form method="post" action="" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.name.label }}
+            {{ form.name(class='form-control') }}
+            {% for error in form.name.errors %}
+                <span class="text-danger"> {{ error }} </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.submit(class='btn btn-primary', value= _('Edit')) }}
+        </p>
+    </form>
+    
+
+    <a href="{{ url_for('.langs') }}">{{ _('Back to languages') }}</a>
+{% endblock %}

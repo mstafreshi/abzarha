@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% include '_utilities/_form_errors.html' %}
+
+    <form method="post" action="" novalidate>
+
+        {{ form.hidden_tag() }}
+
+        <p class="alert alert-info">
+            {{ _('Language') }}: {{ lang.name.capitalize() }}            
+        </p>
+
+        <p>
+            {{ form.word.label }}
+            {{ form.word(class='form-control') }}
+            {% for error in form.word.errors %}
+                <span class='text-danger'> {{ error }} </span>
+            {% endfor %}
+        </p>
+
+        <p> 
+            {{ form.pronunciation.label() }}
+            {{ form.pronunciation(class='form-control') }}
+            {% for error in form.pronunciation.errors %}
+                <span class='text-danger'> {{ error }} </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.meaning.label }}
+            {{ form.meaning(class='form-control', rows=4) }}
+            {% for error in form.meaning.errors %}
+                <span class='text-danger'> {{ error }} </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.submit(class='btn btn-primary') }}
+        </p>
+    </form>
+    
+
+
+    {% for word in paginated %}
+
+        {% if loop.first %}
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <td> </td>
+                    <td> word </td>
+                    <td> {{ _('Pronunciation') }} </td>
+                    <td> {{ _('Meaning') }} </td>
+                    <td> </td>
+                </tr>
+        {% endif %}
+
+        <tr>
+            <td> {{ (paginated.page - 1) * paginated.per_page + loop.index }}</td>
+            <td> {{ word.word }} </td>
+            <td> {{ word.pronunciation }} </td>
+            <td> {{ word.meaning }} </td>
+            <td> <a href="{{ url_for('.edit_word', id=word.id, page=request.args.get('page', 1)) }}">{{ _('Edit') }}</a></td>
+        </tr>
+
+        {% if loop.last %}
+            </table>
+
+            {% include '_utilities/_page_links.html' %}
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}
