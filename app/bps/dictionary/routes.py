@@ -85,8 +85,8 @@ def edit_word(id):
 
     return render_template('edit_word.html', form=form, word=word)
 
-@bp.route('/flash/<int:lang>')
-def flash(lang):
+@bp.route('/flash_card/<int:lang>')
+def flash_card(lang):
     language = db.get_or_404(DictLang, lang)
     paginated = db.paginate(language.words.select().order_by(Word.id.desc()), page=g.page, per_page=1)
-    return render_template('flash.html', paginated=paginated, title=_('Flash card'))
+    return render_template('flash_card.html', paginated=paginated, title=_('Flash card'))
