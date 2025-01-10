@@ -42,9 +42,9 @@ def home():
 def profile(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
     page = int(request.args.get('page', 1))
-    paginated_posts = db.paginate(user.posts.select().order_by(Post.id.desc()), page=page, per_page=current_app.config['PER_PAGE'])
+    paginated = db.paginate(user.posts.select().order_by(Post.id.desc()), page=page, per_page=current_app.config['PER_PAGE'])
 
-    return render_template('profile.html', title=_('Profile'), user=user, paginated_posts=paginated_posts)
+    return render_template('profile.html', title=_('Profile'), user=user, paginated=paginated)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
