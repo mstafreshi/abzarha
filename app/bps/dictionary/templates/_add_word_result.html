@@ -1,0 +1,9 @@
+<turbo-frame  id="result">
+    {% if form.errors %}
+        {% include('_utilities/_form_errors.html') %}
+    {% else %}   
+        <div class="alert alert-success">
+            {{ _('Word %(word)s added successfully', word=word.word) }}
+        </div>
+    {% endif %}
+</turbo-frame>

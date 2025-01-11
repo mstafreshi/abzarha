@@ -1,11 +1,12 @@
 from flask import Flask, g
 from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_mail import Mail
 from flask_moment import Moment
 from config import Config
+from turbo_flask import Turbo
 
 babel = Babel()
 db = SQLAlchemy()
@@ -14,10 +15,15 @@ login.login_view = 'auth.login'
 mail = Mail()
 migrate = Migrate()
 moment = Moment()
+turbo = Turbo()
 
 def get_locale():
     g.locale='es'
     return g.locale
+
+@turbo.user_id
+def get_user_id():
+    return current_user.id
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -29,7 +35,8 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     mail.init_app(app)
     moment.init_app(app)
-
+    turbo.init_app(app)
+    
     from app.bps.main import bp as main_bp
     from app.bps.auth import bp as auth_bp
     from app.bps.errors import bp as errors_bp

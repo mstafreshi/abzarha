@@ -2,10 +2,10 @@ from . import bp
 from app.models import DictLang, Word
 from flask import render_template, flash, url_for, redirect, request, current_app, g
 import sqlalchemy as sa
-from app import db
+from app import db, turbo
 from .forms import LangForm, WordForm
 from flask_babel import _
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 @bp.before_request
 @login_required
@@ -41,8 +41,20 @@ def edit_lang(id):
 
     return render_template('edit_lang.html', form=form, lang=lang, title=_('Edit language'))
 
-@bp.route('/words/<int:lang>', methods=['GET', 'POST'])
+@bp.route('/words/<int:lang>')
 def words(lang):
+    language = db.get_or_404(DictLang, lang)
+
+    paginated = db.paginate(sa.select(Word).where(Word.lang_id == lang).order_by(Word.id.desc()),
+        per_page=current_app.config['PER_PAGE'],
+        page=g.page,
+        error_out=False,
+    )
+
+    return render_template('words.html', lang=language, paginated=paginated)
+
+@bp.route('/add_word/<int:lang>', methods=['GET', 'POST'])
+def add_word(lang):
     language = db.get_or_404(DictLang, lang)
 
     form = WordForm()
@@ -55,15 +67,13 @@ def words(lang):
         db.session.add(word)
         db.session.commit()
 
-        flash(_('Word added successfully'), category='success')
-        return redirect(url_for('.words', lang=lang))
+        turbo.push(turbo.prepend(render_template("_add_word_record.html", word=word), "added_words"), to=current_user.id)
+        return render_template('_add_word_result.html', form=form, word=word)
+    elif request.method == 'POST':
+        return render_template('_add_word_result.html', form=form)
 
-    paginated = db.paginate(sa.select(Word).where(Word.lang_id == lang).order_by(Word.id.desc()),
-        per_page=current_app.config['PER_PAGE'],
-        page=g.page,
-        error_out=False,
-    )
-    return render_template('words.html', form=form, lang=language, paginated=paginated)
+    return render_template('add_word.html', form=form, lang=language)
+
 
 @bp.route('edit_word/<int:id>', methods=['GET', 'POST'])
 def edit_word(id):

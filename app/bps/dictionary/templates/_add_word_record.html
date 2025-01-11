@@ -1,0 +1,11 @@
+<div class="col-3 border"> {{ word.word }} </div>
+<div class="col-3 border"> {{ word.pronunciation }} </div>
+<div class="col-5 border"> {{ word.meaning }} </div>
+<div class="col-1 border"> <a href="{{ url_for('.edit_word', id=word.id, page=request.args.get('page', 1)) }}" target="_blank">{{ _('Edit') }}</a></div>
+
+<script type="text/javascript">
+    
+    document.getElementById('num_rows').innerHTML = 
+        parseInt(document.getElementById('num_rows').innerHTML) + 1;
+    document.getElementById('form').reset();
+</script>
