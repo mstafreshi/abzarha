@@ -67,7 +67,7 @@ def add_word(lang):
         db.session.add(word)
         db.session.commit()
 
-        turbo.push(turbo.prepend(render_template("_add_word_record.html", word=word), "added_words"), to=current_user.id)
+        #turbo.push(turbo.prepend(render_template("_add_word_record.html", word=word), "added_words"), to=current_user.id)
         return render_template('_add_word_result.html', form=form, word=word)
     elif request.method == 'POST':
         return render_template('_add_word_result.html', form=form)
