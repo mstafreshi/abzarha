@@ -41,9 +41,21 @@ def edit_lang(id):
 
     return render_template('edit_lang.html', form=form, lang=lang, title=_('Edit language'))
 
-@bp.route('/words/<int:lang>')
+@bp.route('/words/<int:lang>', methods=['GET', 'POST'])
 def words(lang):
     language = db.get_or_404(DictLang, lang)
+    form = WordForm()
+    if form.validate_on_submit():
+        word = Word()
+        word.word = form.word.data
+        word.pronunciation = form.pronunciation.data
+        word.meaning = form.meaning.data
+        word.lang = language
+        db.session.add(word)
+        db.session.commit()
+
+        flash(_('Word added successfully'), category='success')
+        return redirect(url_for('.words', lang=language.id))
 
     paginated = db.paginate(sa.select(Word).where(Word.lang_id == lang).order_by(Word.id.desc()),
         per_page=current_app.config['PER_PAGE'],
@@ -51,7 +63,7 @@ def words(lang):
         error_out=False,
     )
 
-    return render_template('words.html', lang=language, paginated=paginated)
+    return render_template('words.html', form=form, lang=language, paginated=paginated)
 
 @bp.route('/add_word/<int:lang>', methods=['GET', 'POST'])
 def add_word(lang):
@@ -68,9 +80,11 @@ def add_word(lang):
         db.session.commit()
 
         #turbo.push(turbo.prepend(render_template("_add_word_record.html", word=word), "added_words"), to=current_user.id)
-        return render_template('_add_word_result.html', form=form, word=word)
-    elif request.method == 'POST':
-        return render_template('_add_word_result.html', form=form)
+        # return render_template('_add_word_result.html', form=form, word=word)
+        flash(_('Word added successfully'))
+        return redirect(url_for('words', lang=language.name))
+    #elif request.method == 'POST':
+    #     return render_template('_add_word_result.html', form=form)
 
     return render_template('add_word.html', form=form, lang=language)
 
