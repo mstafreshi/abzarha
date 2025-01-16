@@ -22,7 +22,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=64), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.UniqueConstraint('name'),
+    if_not_exists=True
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -31,7 +32,8 @@ def upgrade():
     sa.Column('password_hash', sa.String(length=120), nullable=False),
     sa.Column('about_me', sa.String(length=280), nullable=True),
     sa.Column('last_seen', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    if_not_exists=True
     )
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_user_email'), ['email'], unique=True)
@@ -44,7 +46,8 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name', 'user_id')
+    sa.UniqueConstraint('name', 'user_id'),
+    if_not_exists=True
     )
     with op.batch_alter_table('note_category', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_note_category_user_id'), ['user_id'], unique=False)
@@ -57,7 +60,8 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    if_not_exists=True
     )
     with op.batch_alter_table('post', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_post_user_id'), ['user_id'], unique=False)
@@ -69,7 +73,8 @@ def upgrade():
     sa.Column('pronunciation', sa.String(length=255), nullable=True),
     sa.Column('lang_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['lang_id'], ['dict_lang.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    if_not_exists=True
     )
     with op.batch_alter_table('word', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_word_lang_id'), ['lang_id'], unique=False)
@@ -85,7 +90,8 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['note_category.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    if_not_exists=True
     )
     # ### end Alembic commands ###
 
