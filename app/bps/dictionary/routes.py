@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 @bp.before_request
 @login_required
 def before_request():
-    g.page = int(request.args.get('page', 1))
+    pass
 
 @bp.route('/langs', methods=['GET', 'POST'])
 def langs():

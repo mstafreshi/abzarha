@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <div class="alert alert-info"> <h1> {{ _('Notes')}} </h1> </div>
+
+    <p>
+        {# <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> | #}
+        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a>
+    </p>
+
+    <div class="row">
+        {% for note in paginated.items %}
+
+        
+
+            <div class="col-12">
+
+                {{ note.body_html | safe }}
+
+                <p> 
+                    <a href="{{ url_for('.edit_note', id=note.id) }}"> {{ _('Edit') }} </a>
+                </p>
+
+            </div>
+
+            
+            {% if not loop.last %}
+                <hr>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+
+    {% include '_utilities/_page_links.html' %}
+{% endblock %}

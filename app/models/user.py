@@ -18,6 +18,8 @@ class User(db.Model, UserMixin):
     about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(280))
     last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
+    notes: so.WriteOnlyMapped['Note'] = so.relationship(back_populates='author')
+    note_categories: so.WriteOnlyMapped['NoteCategory'] = so.relationship(back_populates='owner')
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -49,6 +51,7 @@ class User(db.Model, UserMixin):
         return db.session.scalar(
             sa.select(sa.func.count()).select_from(self.posts.select().subquery())
         )
+
 
 @login.user_loader
 def load_user(id):

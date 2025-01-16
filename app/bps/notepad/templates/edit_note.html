@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <p>
+        <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> | 
+        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a>
+    </p>
+
+    {% include '_utilities/_form_errors.html' %}
+    
+    <form method="post" action="" novalidate>
+
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.title(class='form-control') }}
+            {% for error in form.title.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.body(class='form-control', rows=10) }}
+            {% for error in form.body.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.category_id(class='form-select') }}
+            {% for error in form.category_id.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.submit(class='btn btn-primary') }}
+        </p>
+
+    </form>
+
+
+
+{% endblock %}

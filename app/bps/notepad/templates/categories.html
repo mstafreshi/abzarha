@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        
+        <p>
+            <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> | 
+            <a href="{{ url_for('.add_note') }}"> {{ _('Add notes') }} </a>
+        </p>
+
+        <form method="post" action="" novalidate>
+
+            {{ form.hidden_tag() }}
+
+            <div class="row mb-3">
+                <div class="col-auto">
+                    {{ form.name(class='form-control', placeholder=_('Category name')) }}
+                    {% for error in form.name.errors %}
+                        <span class="text-danger"> {{ error }} </span>
+                    {% endfor %}
+                </div>
+
+                <div class="col-auto">
+                    {{ form.submit(class='btn btn-primary') }}
+                </div>
+            </div>
+
+
+        </form>
+
+        {% for row in rows %}
+            {% if loop.first %}
+                <table class="table table-bordered">
+                    <tr>
+                        <td> #</td>
+                        <td> {{ _('Name') }} </td>
+                        <td> </td>
+                    </tr>                
+            {% endif %}  
+
+            <tr>
+                <td> {{ loop.index }} </td>
+                <td> {{ row.name }} </td>
+                <td> <a href="{{ url_for('.edit_category', id=row.id) }}">Edit</a> </td>
+            </tr>
+
+            {% if loop.last %}
+                </table>              
+            {% endif %}          
+        {% endfor %}
+{% endblock %}

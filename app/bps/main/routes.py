@@ -1,5 +1,5 @@
 from . import bp
-from flask import render_template, flash, redirect, url_for, request, current_app
+from flask import render_template, flash, redirect, url_for, request, current_app, g
 from flask_babel import _
 from flask_login import login_required, current_user
 from .forms import PostForm, ProfileForm
@@ -15,6 +15,9 @@ def app_before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
+
+    g.page = int(request.args.get('page', 1))
+    g.per_page = current_app.config.get('PER_PAGE', 10)
 
 @bp.before_request
 @login_required
