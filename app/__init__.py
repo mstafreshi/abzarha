@@ -18,7 +18,9 @@ moment = Moment()
 turbo = Turbo()
 
 def get_locale():
-    return current_user.lang if current_user.lang else 'en'
+
+    return current_user.lang \
+        if current_user.is_authenticated and current_user.lang else 'en'
 
 @turbo.user_id
 def get_user_id():
