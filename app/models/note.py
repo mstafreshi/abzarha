@@ -13,6 +13,7 @@ class Note(db.Model):
     body_html: so.Mapped[str] = so.mapped_column(sa.Text)
     category_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('note_category.id'))
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'))
+    lang: so.Mapped[Optional[str]] = so.mapped_column(sa.String(2), index=True)
     created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     updated_at: so.Mapped[Optional[datetime]]
     category: so.Mapped['NoteCategory'] = so.relationship(back_populates='notes')

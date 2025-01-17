@@ -6,11 +6,14 @@ import sqlalchemy as sa
 from app import db
 from app.models import NoteCategory
 from flask_login import current_user
+from flask import current_app
 
 class NoteForm(FlaskForm):
     title = StringField(_l('Title'), validators=[Length(max=255)])
     body = TextAreaField(_l('Body'), validators=[DataRequired()])
     category_id = SelectField(_l('Category'), coerce=int, validators=[DataRequired()])
+    lang = SelectField(_l('Language'), coerce=str)
+
     submit = SubmitField(_l('Submit'))
 
     def __init__(self, *args, **kwargs):
@@ -22,6 +25,7 @@ class NoteForm(FlaskForm):
                     .order_by(NoteCategory.id.desc())
             )
         ]
+        self.lang.choices = [(code, code) for code, options in current_app.config['LANGS'].items()]
 
     def validate_category_id(self, field):
         r = db.session.scalar(

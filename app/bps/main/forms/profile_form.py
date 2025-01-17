@@ -1,8 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, SubmitField
+from wtforms import StringField, SelectField, TextAreaField, SubmitField
 from wtforms.validators import Length
 from flask_babel import lazy_gettext as _l
+from flask import current_app
 
 class ProfileForm(FlaskForm):
+    name = StringField(_l('Name'), validators=[Length(max=128)])
+    lang = SelectField(_l('Language'), coerce=str)
     about_me = TextAreaField(_l('About me'), validators=[Length(min=0, max=280)])
     submit = SubmitField(_l('Submit'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.lang.choices = [(code, code) for code, options in current_app.config['LANGS'].items()]

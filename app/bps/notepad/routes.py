@@ -67,6 +67,7 @@ def add_note():
         note.title = form.title.data
         note.body = form.body.data
         note.author = current_user
+        note.lang = form.lang.data
         note.category_id = form.category_id.data
         db.session.add(note)
         db.session.commit()
@@ -88,6 +89,7 @@ def edit_note(id):
     if form.validate_on_submit():
         note.title = form.title.data
         note.body = form.body.data
+        note.lang = form.lang.data
         note.category_id = form.category_id.data
         db.session.commit()
         flash(_('Note editted successfully'))

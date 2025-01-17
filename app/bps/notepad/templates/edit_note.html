@@ -35,6 +35,13 @@
         </p>
 
         <p>
+            {{ form.lang(class='form-select') }}
+            {% for error in form.lang.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
             {{ form.submit(class='btn btn-primary') }}
         </p>
 

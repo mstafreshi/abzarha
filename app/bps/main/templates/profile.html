@@ -2,7 +2,7 @@
 
 {% block content %}
     
-    <div  class="row mb-5 border p-3">
+    <div  class="row mb-5 border p-3 mx-auto">
         <div class="col-auto">
             <a href='{{ url_for('.profile', username=user.username)}}'><img src='{{ user.avatar() }}'></a>
         </div>
