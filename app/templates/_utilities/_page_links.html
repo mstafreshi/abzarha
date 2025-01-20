@@ -1,17 +1,35 @@
-<div class="d-flex bd-highlight mb-3">
-    {% if paginated.has_next %}
-        <div class="p-1 bd-highlight">
-        <a href="{{ url_for(request.endpoint, page=paginated.next_num, **request.view_args) }}">
-            {{ _('Prev') }}
-        </a>
-        </div>
-    {% endif %}
+<div class="row mb-3">
 
-    {% if paginated.has_prev %}
-        <div class="ms-auto p-1 bd-highlight">
+    <div class="col-2">
+    <a href="{{ url_for(request.endpoint, page=1, **request.view_args) }}">
+        {{ _('First') }}
+    </a>        
+    </div>
+
+    <div class="col-2">
+    {% if paginated.has_prev %}        
         <a href="{{ url_for(request.endpoint, page=paginated.prev_num, **request.view_args) }}">
             {{ _('Next') }}
         </a>
-        </div>
     {% endif %}
+    </div>
+
+    <div class="col-4">
+        {{ _('Page') }} {{ paginated.page }} {{ _('of') }} {{ paginated.pages }}
+    </div>
+
+    
+    <div class="col-2">
+    {% if paginated.has_next %}
+        <a href="{{ url_for(request.endpoint, page=paginated.next_num, **request.view_args) }}">
+            {{ _('Prev') }}
+        </a>
+    {% endif %}
+    </div>
+
+    <div class="col-2">
+     <a href="{{ url_for(request.endpoint, page=paginated.pages, **request.view_args) }}">
+        {{ _('Last') }}
+    </a>
+    </div>
 </div>

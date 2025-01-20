@@ -12,12 +12,16 @@ from langdetect import detect
 
 @bp.before_app_request
 def app_before_request():
+    g.per_page = current_app.config.get('PER_PAGE', 10)
+
     if current_user.is_authenticated:
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
 
+        if int(current_user.per_page) > 0:
+            g.per_page = current_user.per_page            
+
     g.page = int(request.args.get('page', 1))
-    g.per_page = current_app.config.get('PER_PAGE', 10)
     g.locale = str(get_locale())
 
 @bp.before_request
@@ -38,7 +42,7 @@ def home():
         return redirect(url_for('.home'))
 
     page = int(request.args.get('page', 1))
-    paginated = db.paginate(sa.select(Post).order_by(Post.id.desc()), page=page, per_page=current_app.config['PER_PAGE'])
+    paginated = db.paginate(sa.select(Post).order_by(Post.id.desc()), page=page, per_page=g.per_page)
 
     return render_template('home.html', title=_('Home'), form=form, paginated=paginated)
 
@@ -46,7 +50,7 @@ def home():
 def profile(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
     page = int(request.args.get('page', 1))
-    paginated = db.paginate(user.posts.select().order_by(Post.id.desc()), page=page, per_page=current_app.config['PER_PAGE'])
+    paginated = db.paginate(user.posts.select().order_by(Post.id.desc()), page=page, per_page=g.per_page)
     return render_template('profile.html', title=_('Profile'), user=user, paginated=paginated)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -55,6 +59,7 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.name = form.name.data
         current_user.lang = form.lang.data
+        current_user.per_page = int(form.per_page.data)
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash(_('Profile updated successfully.'))

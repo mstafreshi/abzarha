@@ -2,6 +2,8 @@
 
 {% block content %}
 
+    {% include '_utilities/_form_errors.html' %}
+
     <form method="post" action="" novalidate>
 
         {{ form.hidden_tag() }}
@@ -19,6 +21,14 @@
             {{ form.lang(class='form-select') }}
             {% for error in form.lang.errors %}
                 <span classs='text-danger'>{{ error }}</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.per_page.label }}
+            {{ form.per_page(class='form-control') }}
+            {% for error in form.per_page.errors %}
+                <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </p>
 

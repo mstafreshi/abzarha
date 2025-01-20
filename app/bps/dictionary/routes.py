@@ -58,7 +58,7 @@ def words(lang):
         return redirect(url_for('.words', lang=language.id))
 
     paginated = db.paginate(sa.select(Word).where(Word.lang_id == lang).order_by(Word.id.desc()),
-        per_page=current_app.config['PER_PAGE'],
+        per_page=g.per_page,
         page=g.page,
         error_out=False,
     )
