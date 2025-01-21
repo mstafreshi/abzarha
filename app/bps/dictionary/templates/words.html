@@ -15,7 +15,7 @@
 
         <p>
             {{ form.word.label }}
-            {{ form.word(class='form-control') }}
+            {{ form.word(class='form-control', dir='ltr') }}
             {% for error in form.word.errors %}
                 <span class='text-danger'> {{ error }} </span>
             {% endfor %}
@@ -23,7 +23,7 @@
 
         <p> 
             {{ form.pronunciation.label() }}
-            {{ form.pronunciation(class='form-control') }}
+            {{ form.pronunciation(class='form-control', dir='ltr') }}
             {% for error in form.pronunciation.errors %}
                 <span class='text-danger'> {{ error }} </span>
             {% endfor %}
@@ -46,7 +46,7 @@
     {% for word in paginated %}
 
         {% if loop.first %}
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover text-center">
                 <tr>
                     <td> </td>
                     <td> word </td>
@@ -59,7 +59,7 @@
         <tr>
             <td> {{ (paginated.page - 1) * paginated.per_page + loop.index }}</td>
             <td> {{ word.word }} </td>
-            <td> {{ word.pronunciation }} </td>
+            <td dir=ltr> {{ word.pronunciation }} </td>
             <td> {{ word.meaning }} </td>
             <td> <a href="{{ url_for('.edit_word', id=word.id, page=request.args.get('page', 1)) }}">{{ _('Edit') }}</a></td>
         </tr>

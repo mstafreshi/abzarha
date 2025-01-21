@@ -6,10 +6,11 @@
     </a>        
     </div>
 
+    
     <div class="col-2">
-    {% if paginated.has_prev %}        
-        <a href="{{ url_for(request.endpoint, page=paginated.prev_num, **request.view_args) }}">
-            {{ _('Next') }}
+    {% if paginated.has_next %}
+        <a href="{{ url_for(request.endpoint, page=paginated.next_num, **request.view_args) }}">
+            {{ _('Prev') }}
         </a>
     {% endif %}
     </div>
@@ -19,10 +20,12 @@
     </div>
 
     
+    
+
     <div class="col-2">
-    {% if paginated.has_next %}
-        <a href="{{ url_for(request.endpoint, page=paginated.next_num, **request.view_args) }}">
-            {{ _('Prev') }}
+    {% if paginated.has_prev %}        
+        <a href="{{ url_for(request.endpoint, page=paginated.prev_num, **request.view_args) }}">
+            {{ _('Next') }}
         </a>
     {% endif %}
     </div>
