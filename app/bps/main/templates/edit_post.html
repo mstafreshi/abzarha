@@ -19,9 +19,20 @@
 
     </form>
 
-    <hr>
 
-    <form method="post" action="{{ url_for('.delete_post', id=post.id) }}">
+
+    {% include '_utilities/_upload_form.html' %}
+    
+
+
+    {% for file in db.session.scalars(post.files.select()) %}
+
+        {% set loop_ = loop %}
+        {% include '_utilities/_file.html' %}
+
+    {% endfor %}
+
+    <form method="post" class="mt-5" action="{{ url_for('.delete_post', id=post.id) }}">
         {{ form.hidden_tag() }}
 
         {{ form.submit(class='btn btn-danger', value=_('Delete this post')) }}

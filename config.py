@@ -20,3 +20,6 @@ class Config:
                                 'en': {'rtl': False},
                                 'es': {'rtl': False},
                               }
+
+    POST_FILES_DIRECTORY    = os.environ.get('POST_FILES_DIRECTORY')
+    NOTE_FILES_DIRECTORY    = os.environ.get('NOTE_FILES_DIRECTORY')

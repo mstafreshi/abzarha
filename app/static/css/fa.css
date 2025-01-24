@@ -1,0 +1,47 @@
+body, body .markdown-body {
+    font-family: vazirmatn
+}
+
+.fa-post {
+    font-family: Sahel;
+    font-size:1em;
+}
+
+.fa-date {
+    font-family: Sahel;
+    font-size: 1em;
+}
+
+a {
+    text-decoration:none
+}
+
+.markdown-body a:hover {
+    text-decoration:none
+}
+
+.card-header {
+    direction: rtl;
+}
+
+footer {
+    direction: rtl;
+}
+
+.profile {
+    direction: rtl;
+}
+
+.rtl {
+    direction:rtl
+}
+
+.markdown-body blockquote {
+  border-left: .0em solid silver;
+  border-right: .25em solid #d0d7de;
+}
+
+.markdown-body code {
+    unicode-bidi: plaintext;
+    direction:ltr
+}

@@ -1,0 +1,21 @@
+{% if loop_.first %}
+    <div class="row mt-2">
+{% endif %}
+
+<div class="col-4">
+    <a href="{{ url_for('main.image', id=file.id) }}" target="_blank">
+        <img class="img-thumbnail" src="{{ url_for('main.image', id=file.id) }}">
+    </a>
+
+    {% if markdown %}
+        <br>
+        <span class='text-left' dir=ltr> 
+        ![{{ file.caption or "" }}]({{ url_for('main.image', id=file.id) }} "{{ file.caption or ""}}") </span> <br>
+        <span class='text-left' dir="ltr"> [{{ file.caption or "" }}]({{ url_for('main.image', id=file.id) }})</span>
+    {% endif %}
+    
+</div>
+
+{% if loop_.last %}
+    </div>
+{% endif %}

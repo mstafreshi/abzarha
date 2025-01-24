@@ -12,3 +12,6 @@ DATABASE_URL="mysql://root:@localhost:3306/abzarha"
 APP_NAME="Abzarha"
 ADMINS="safari.tafreshi@gmail.com,sara.safari@gmail.com"
 PER_PAGE=10
+
+POST_FILES_DIRECTORY="app/uploads/posts"
+NOTE_FILES_DIRECTORY="app/uploads/notes"

@@ -16,9 +16,11 @@ class Note(db.Model):
     lang: so.Mapped[Optional[str]] = so.mapped_column(sa.String(2), index=True)
     created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     updated_at: so.Mapped[Optional[datetime]]
+
     category: so.Mapped['NoteCategory'] = so.relationship(back_populates='notes')
     author: so.Mapped['User'] = so.relationship(back_populates='notes')
-
+    files: so.WriteOnlyMapped['File'] = so.relationship(back_populates='note')
+    
     @staticmethod
     def body_changed(target, value, oldvalue, initiator):
         md = markdown(value, output_format='html', 

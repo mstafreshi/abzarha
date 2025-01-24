@@ -1,15 +1,21 @@
 from . import bp
-from flask import render_template, flash, redirect, url_for, request, current_app, g
+from flask import render_template, flash, redirect, url_for, request, current_app, g, send_from_directory
 from flask_babel import _, get_locale
 from flask_login import login_required, current_user
-from .forms import PostForm, ProfileForm
+from .forms import PostForm, ProfileForm, UploadForm
 from app import db
-from app.models import Post, User
+from app.models import Post, User, File, Note
 from app.forms import EmptyForm
 import sqlalchemy as sa
 from datetime import datetime, timezone
 from langdetect import detect
+from werkzeug.utils import secure_filename
+import os
 
+@bp.app_context_processor
+def inject_symbols_to_templates():
+    return {'db': db}
+    
 @bp.before_app_request
 def app_before_request():
     g.per_page = current_app.config.get('PER_PAGE', 10)
@@ -80,7 +86,9 @@ def edit_post(id):
         form.text.data = post.text
 
     delete_form = EmptyForm()
-    return render_template('edit_post.html', title=_('Edit post'), post=post, form=form, delete_form=delete_form)
+    upload_form = UploadForm()
+
+    return render_template('edit_post.html', title=_('Edit post'), post=post, form=form, delete_form=delete_form, upload_form=upload_form)
 
 @bp.route('/delete_post/<int:id>', methods=['POST'])
 def delete_post(id):
@@ -89,3 +97,78 @@ def delete_post(id):
     db.session.commit()
     flash(_('Post deleted successfully.'))
     return redirect(url_for('.home'))
+
+@bp.route('/upload_file/<string:to>/<int:id>', methods=['POST'])
+def upload_file(to, id):
+    form = UploadForm()
+    if not form.validate_on_submit():
+        return render_template('_utilities/_form_errors.html', form=form)
+
+    post = None
+    note = None
+
+    if to == 'post':
+        post = db.first_or_404(
+            sa.select(Post).where(
+                sa.and_(
+                    Post.id ==id,
+                    Post.author == current_user
+                )
+            )
+        )
+        folder_id = post.id
+        back_url = url_for('.edit_post', id=post.id)
+
+    elif to == 'note':
+        note = db.first_or_404(
+            sa.select(Note).where(
+                sa.and_(
+                    Note.id == id,
+                    Note.author == current_user
+                )
+            )
+        )
+        folder_id = note.id
+        back_url = url_for('notepad.edit_note', id=note.id)
+
+    else:
+        return 'invalid target'
+
+    file = request.files['file']
+    if file.filename == '':
+        return 'no file selected', 204
+
+    path = os.path.join(
+        current_app.config['POST_FILES_DIRECTORY'] if to == 'post' else current_app.config['NOTE_FILES_DIRECTORY'],
+        str(current_user.id),
+        str(folder_id)
+    )
+
+    if not os.path.exists(path):
+       os.makedirs(path)
+
+    filename = secure_filename(file.filename)
+    full_path = os.path.join(path, filename)
+
+    file.save(full_path)
+
+    file = File()
+    file.post = post if post else None
+    file.note = note if note else None
+    file.path = full_path[4:]
+    file.caption = form.caption.data
+    file.owner = current_user
+    db.session.add(file)
+    db.session.commit()
+
+    flash(_('File uploaded successfully.'))
+    return redirect(back_url)
+
+@bp.route('/image/<int:id>')
+def image(id):
+    file = db.get_or_404(File, id)
+    
+    if file.owner != current_user:
+        abort(404)
+
+    return send_from_directory(os.path.dirname(file.path), os.path.basename(file.path))

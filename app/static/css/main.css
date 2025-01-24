@@ -1,9 +1,79 @@
-.fa-post {
-    font-family: Sahel;
-    font-size:1em;
+.h1 a, .h2 a, .h3 a, .h4 a, .h5 a {
+    text-decoration:none
 }
 
-.fa-date {
-    font-family: Sahel;
-    font-size: 1em;
+a {
+  color: #66a;
+  text-decoration:none
 }
+
+a:hover {
+  color: #000;
+}
+
+form #body, form #resume {
+    min-height: 250px
+}
+
+form #comment {
+    min-height:150px
+}
+
+/*
+#flask-pagedown-body-preview {
+    margin-top:5px;
+    padding:10px;
+    border-style:solid;
+    border-color:red;
+    border-width:1px;
+}
+*/
+
+.post-info-line {
+    font-size: 1em
+}
+
+.codehilite {
+    text-align:left;
+    direction:ltr;
+}
+
+
+.codehilite .filename {
+    background-color: #d8e3eb;
+    padding: 5px 0 5px 15px;
+    display: flex;
+    font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+    font-size: .8em
+}
+
+
+.markdown-body img, .markdown-body video {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.markdown-body figcaption {
+    text-align:center;
+    margin-top:5px;
+    vertical-align:sub;
+    font-size:smaller;
+}
+
+
+.headerlink {
+    display:none;
+    padding-left:5px;
+    padding-right:5px;
+}
+
+h2:hover .headerlink,
+h3:hover .headerlink,
+h4:hover .headerlink,
+h5:hover .headerlink,
+h6:hover .headerlink
+{
+  display: inline;
+}
+

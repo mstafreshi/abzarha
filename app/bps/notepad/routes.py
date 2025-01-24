@@ -1,11 +1,14 @@
-from flask import render_template, flash, redirect, url_for, request, g
+from flask import render_template, flash, redirect, url_for, request, g, current_app
 from . import bp
-from app.models import NoteCategory, Note
+from app.models import NoteCategory, Note, File
 from .forms import CategoryForm, NoteForm
+from app.bps.main.forms import UploadForm
 from app import db
 import sqlalchemy as sa
 from flask_login import current_user, login_required
 from flask_babel import _
+import os
+from werkzeug.utils import secure_filename
 
 @bp.before_request
 @login_required
@@ -95,4 +98,5 @@ def edit_note(id):
         flash(_('Note editted successfully'))
         return redirect(url_for('.edit_note', id=id))
 
-    return render_template('edit_note.html', form=form)
+    upload_form = UploadForm()
+    return render_template('edit_note.html', note=note, form=form, upload_form=upload_form)

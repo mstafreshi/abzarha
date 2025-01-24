@@ -49,4 +49,16 @@
 
 
 
+
+    {% include '_utilities/_upload_form.html' %}
+
+
+
+    {% for file in db.session.scalars(note.files.select()) %}
+
+        {% set loop_ = loop %}
+        {% set markdown = True %}
+        {% include '_utilities/_file.html' %}
+
+    {% endfor %}
 {% endblock %}

@@ -1,0 +1,30 @@
+{% if post and post.id %}
+    {% set action_ = url_for('main.upload_file', to='post', id=post.id) %}
+{% elif note and note.id %}
+    {% set action_ = url_for('main.upload_file', to='note', id=note.id) %}
+{% else %}
+    <h1> Invalid upload form action </h1>
+{% endif %}
+
+<form class='mt-5' action="{{ action_ }}" method="post" enctype="multipart/form-data">
+        {{ upload_form.hidden_tag() }}
+
+        <p>
+            {{ upload_form.file(class='form-control') }}
+            {% for error in upload_form.file.errors %}
+                <span class="text-danger"> {{ error }} </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ upload_form.caption(class='form-control', placeholder=_('Catption')) }}
+            {% for error in upload_form.caption.errors %}
+                <span class="text-danger"> {{ error }} </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ upload_form.submit(class='btn btn-primary', value=_('Upload file')) }}
+        </p>
+
+    </form>

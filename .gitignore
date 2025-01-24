@@ -1,3 +1,4 @@
+.flaskenv
 .idea/
 .vscode/
 .venv*/
@@ -9,4 +10,4 @@ htmlcov/
 .tox/
 docs/_build/
 app.db
-.flaskenv
+app/uploads/
