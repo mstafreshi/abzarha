@@ -62,6 +62,19 @@ def notes():
 
     return render_template('notes.html', paginated=notes)
 
+@bp.route('/note/<int:id>')
+def note(id):
+    note = db.first_or_404(
+        sa.select(Note).where(
+            sa.and_(
+                Note.author == current_user,
+                Note.id == id
+            )
+        )
+    )
+
+    return render_template('note.html', note=note)
+
 @bp.route('/add_note', methods=['GET', 'POST'])
 def add_note():
     form = NoteForm()
@@ -75,7 +88,7 @@ def add_note():
         db.session.add(note)
         db.session.commit()
         flash(_('Note added successfully.'))
-        return redirect(url_for('.add_note'))
+        return redirect(url_for('.edit_note', id=note.id))
 
     return render_template('add_note.html', form=form)
 

@@ -12,7 +12,7 @@
             {{ form.hidden_tag() }}
 
             <div class="row mb-3">
-                <div class="col-auto">
+                <div class="col">
                     {{ form.name(class='form-control', placeholder=_('Category name')) }}
                     {% for error in form.name.errors %}
                         <span class="text-danger"> {{ error }} </span>

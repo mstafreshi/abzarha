@@ -4,7 +4,8 @@
 
     <p>
         <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> | 
-        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a>
+        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
+        <a href="{{ url_for('.note', id=note.id) }}"> {{ note.title or _("No title") }} </a> 
     </p>
 
     {% include '_utilities/_form_errors.html' %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <p>
+        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
+        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a> | 
+        <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> 
+    </p>
+
+    <div class="row">
+    
+            <div class="col-12 {{ note.lang }}-post markdown-body">
+
+                {{ note.body_html | safe }}
+
+                <p> 
+                    <a href="{{ url_for('.edit_note', id=note.id) }}"> {{ _('Edit') }} </a>
+                </p>
+
+            </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block styles %}
+
+    <link href="{{ url_for('static', filename='css/github-markdown-light.css') }}" type="text/css" rel="stylesheet" >             
+    <link href="{{ url_for('static', filename='css/codehilite.css') }}" type="text/css" rel="stylesheet" >
+    
+    {% if g.lang_code == 'fa' %}
+        <link href="{{ url_for('static', filename='css/admonition_fa.css') }}" type="text/css" rel="stylesheet" >
+    {% else %}
+        <link href="{{ url_for('static', filename='css/admonition.css') }}" type="text/css" rel="stylesheet" >
+    {% endif %}       
+    <link href="{{ url_for('static', filename='css/keys.css') }}" type="text/css" rel="stylesheet" >
+    {{ super() }}
+    
+{% endblock %}
