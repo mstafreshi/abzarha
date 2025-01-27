@@ -63,37 +63,18 @@ def notes():
 
     return render_template('notes.html', paginated=notes)
 
-# nop = next or prev
 @bp.route('/note/<int:id>')
-@bp.route('/note/<int:id>/<nop>')
-def note(id, nop=None):
-    if nop not in ['next', 'prev', None]:
-        abort(404)
-
+def note(id):
     sql = sa.select(Note).where(Note.author == current_user);
+    next_sql = sql.where(Note.id > id).order_by(Note.id.asc())
+    prev_sql = sql.where(Note.id < id).order_by(Note.id.desc())
+    main_sql = sql.where(Note.id == id)
 
-    if nop == 'next':
-        s = sql.where(Note.id > id).order_by(Note.id.asc())
-    elif nop == 'prev':
-        s = sql.where(Note.id < id).order_by(Note.id.desc())
-    else:
-        s = sql.where(Note.id == id)
-
-    note = db.session.scalar(s)
-
-    if note is None and nop is None:
-        abort(404)
-
-    if note is None:
-        if nop == 'next':
-            s = sql.order_by(Note.id.desc())
-        elif nop == 'prev':
-            s = sql.order_by(Note.id.asc())
-        note = db.session.scalar(s)
-        if not note:
-            abort(404)
-
-    return render_template('note.html', note=note)
+    note = db.first_or_404(main_sql)
+    prev_note = db.session.scalar(prev_sql)
+    next_note = db.session.scalar(next_sql)
+    
+    return render_template('note.html', note=note, next_note=next_note, prev_note=prev_note)
 
 @bp.route('/add_note', methods=['GET', 'POST'])
 def add_note():

@@ -3,7 +3,7 @@
 {% block content %}
     
     
-
+    <div class="alert alert-info">{{ note.title or _('No title') }} </div>
     <div class="row">
     
             <div class="col-12 {{ note.lang }}-post markdown-body">
@@ -19,11 +19,13 @@
     </div>
 
 
-    <div class="row mt-5">
+    <div class="row mt-5 mx-auto">
         <div class="col-1 text-start">
-            <a href="{{ url_for('.note', id=note.id, nop='prev') }}">
-                {{ _('Prev') }}
-            </a>
+            {% if prev_note %}
+                <a href="{{ url_for('.note', id=prev_note.id) }}">
+                    {{ prev_note.title or _('Prev') }}
+                </a>
+            {% endif %}
         </div>
 
         <div class="col-10 text-center">
@@ -33,9 +35,11 @@
         </div>
 
         <div class="col-1 text-end">
-            <a href="{{ url_for('.note', id=note.id, nop='next') }}">
-                {{ _('Next') }}
-            </a>
+            {% if next_note %}
+                <a href="{{ url_for('.note', id=next_note.id) }}">
+                    {{ next_note.title or _('Next') }}
+                </a>
+            {% endif %}
         </div>
     </div>
 
