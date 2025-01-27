@@ -2,11 +2,7 @@
 
 {% block content %}
     
-    <p>
-        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
-        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a> | 
-        <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> 
-    </p>
+    
 
     <div class="row">
     
@@ -21,6 +17,13 @@
             </div>
 
     </div>
+
+
+    <p class="mt-5 mb-5">
+        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
+        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a> | 
+        <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> 
+    </p>
 
 {% endblock %}
 

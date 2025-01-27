@@ -4,9 +4,7 @@
 
     {# include '_utilities/_form_errors.html' #}
     
-    <p>
-        <a href="{{ url_for('.categories') }}">{{ _('Categories') }}</a> 
-    </p>
+    
     
     <form method="post" accept="" novalidate>
 
@@ -21,7 +19,7 @@
                 {% endfor %}
             </div>
 
-            <div class="col">
+            <div class="col-auto">
                 {{ form.submit(class='btn btn-primary') }}
             </div>
         </div>
@@ -29,6 +27,8 @@
     </form>
 
     
-    
+    <p class="mb-3 mt-3">
+        <a href="{{ url_for('.categories') }}">{{ _('Categories') }}</a> 
+    </p>
 
 {% endblock %}

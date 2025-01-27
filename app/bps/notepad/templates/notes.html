@@ -4,10 +4,7 @@
     
     <div class="alert alert-info h1">  {{ _('Notes')}} </div>
 
-    <p>
-        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
-        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a>
-    </p>
+   
 
     <ul>
         {% for note in paginated.items %}
@@ -29,4 +26,9 @@
     </ul>
 
     {% include '_utilities/_page_links.html' %}
+
+     <p class="mt-5 mb-5">
+        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
+        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a>
+    </p>
 {% endblock %}

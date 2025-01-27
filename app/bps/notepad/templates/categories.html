@@ -2,10 +2,7 @@
 
 {% block content %}
         
-        <p>
-            <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> | 
-            <a href="{{ url_for('.add_note') }}"> {{ _('Add notes') }} </a>
-        </p>
+        
 
         <form method="post" action="" novalidate>
 
@@ -47,4 +44,10 @@
                 </table>              
             {% endif %}          
         {% endfor %}
+
+
+        <p class="mt-3 mb-3">
+            <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> | 
+            <a href="{{ url_for('.add_note') }}"> {{ _('Add notes') }} </a>
+        </p>
 {% endblock %}

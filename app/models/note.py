@@ -19,7 +19,7 @@ class Note(db.Model):
 
     category: so.Mapped['NoteCategory'] = so.relationship(back_populates='notes')
     author: so.Mapped['User'] = so.relationship(back_populates='notes')
-    files: so.WriteOnlyMapped['File'] = so.relationship(back_populates='note')
+    files: so.WriteOnlyMapped['File'] = so.relationship(back_populates='note', passive_deletes=True)
     
     @staticmethod
     def body_changed(target, value, oldvalue, initiator):

@@ -13,4 +13,4 @@ class Post(db.Model):
     updated_at: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     
     author: so.Mapped['User'] = so.relationship(back_populates='posts')
-    files: so.WriteOnlyMapped['File'] = so.relationship(back_populates='post')
+    files: so.WriteOnlyMapped['File'] = so.relationship(back_populates='post', passive_deletes=True)

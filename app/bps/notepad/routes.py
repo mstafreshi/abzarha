@@ -3,6 +3,7 @@ from . import bp
 from app.models import NoteCategory, Note, File
 from .forms import CategoryForm, NoteForm
 from app.bps.main.forms import UploadForm
+from app.forms import EmptyForm
 from app import db
 import sqlalchemy as sa
 from flask_login import current_user, login_required
@@ -112,4 +113,20 @@ def edit_note(id):
         return redirect(url_for('.edit_note', id=id))
 
     upload_form = UploadForm()
-    return render_template('edit_note.html', note=note, form=form, upload_form=upload_form)
+    empty_form = EmptyForm()
+    return render_template('edit_note.html',note=note, form=form, 
+        upload_form=upload_form, empty_form=empty_form)
+
+@bp.route('/delete_note/<int:id>', methods=['POST'])
+def delete_note(id):
+    note = db.first_or_404(
+        sa.select(Note).where(sa.and_(Note.id == id, Note.author == current_user))
+    )
+
+    db.session.delete(note)
+    db.session.commit()
+    flash(_("%(title)s deleted successfully", 
+                title=note.title if note.title else str(note.id))
+    )
+
+    return redirect(url_for('.notes'))
