@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, g, current_app
+from flask import render_template, flash, redirect, url_for, request, g, current_app, abort
 from . import bp
 from app.models import NoteCategory, Note, File
 from .forms import CategoryForm, NoteForm
@@ -63,16 +63,35 @@ def notes():
 
     return render_template('notes.html', paginated=notes)
 
+# nop = next or prev
 @bp.route('/note/<int:id>')
-def note(id):
-    note = db.first_or_404(
-        sa.select(Note).where(
-            sa.and_(
-                Note.author == current_user,
-                Note.id == id
-            )
-        )
-    )
+@bp.route('/note/<int:id>/<nop>')
+def note(id, nop=None):
+    if nop not in ['next', 'prev', None]:
+        abort(404)
+
+    sql = sa.select(Note).where(Note.author == current_user);
+
+    if nop == 'next':
+        s = sql.where(Note.id > id).order_by(Note.id.asc())
+    elif nop == 'prev':
+        s = sql.where(Note.id < id).order_by(Note.id.desc())
+    else:
+        s = sql.where(Note.id == id)
+
+    note = db.session.scalar(s)
+
+    if note is None and nop is None:
+        abort(404)
+
+    if note is None:
+        if nop == 'next':
+            s = sql.order_by(Note.id.desc())
+        elif nop == 'prev':
+            s = sql.order_by(Note.id.asc())
+        note = db.session.scalar(s)
+        if not note:
+            abort(404)
 
     return render_template('note.html', note=note)
 

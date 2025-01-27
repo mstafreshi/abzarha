@@ -19,11 +19,25 @@
     </div>
 
 
-    <p class="mt-5 mb-5">
-        <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
-        <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a> | 
-        <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a> 
-    </p>
+    <div class="row mt-5">
+        <div class="col-1 text-start">
+            <a href="{{ url_for('.note', id=note.id, nop='prev') }}">
+                {{ _('Prev') }}
+            </a>
+        </div>
+
+        <div class="col-10 text-center">
+            <a href="{{ url_for('.categories') }}"> {{ _('Categories') }} </a> |
+            <a href="{{ url_for('.add_note') }}"> {{ _('Add note') }} </a> | 
+            <a href="{{ url_for('.notes') }}"> {{ _('Notes') }} </a>
+        </div>
+
+        <div class="col-1 text-end">
+            <a href="{{ url_for('.note', id=note.id, nop='next') }}">
+                {{ _('Next') }}
+            </a>
+        </div>
+    </div>
 
 {% endblock %}
 
