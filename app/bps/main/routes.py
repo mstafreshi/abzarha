@@ -1,5 +1,5 @@
 from . import bp
-from flask import render_template, flash, redirect, url_for, request, current_app, g, send_from_directory
+from flask import render_template, flash, redirect, url_for, request, current_app, g, send_from_directory, abort
 from flask_babel import _, get_locale
 from flask_login import login_required, current_user
 from .forms import PostForm, ProfileForm, UploadForm
@@ -48,13 +48,20 @@ def home():
         return redirect(url_for('.home'))
 
     page = int(request.args.get('page', 1))
-    paginated = db.paginate(sa.select(Post).order_by(Post.id.desc()), page=page, per_page=g.per_page)
+    paginated = db.paginate(
+        sa.select(Post).where(Post.author == current_user).order_by(Post.id.desc()),
+        page=page,
+        per_page=g.per_page
+    )
 
     return render_template('home.html', title=_('Home'), form=form, paginated=paginated)
 
 @bp.route('/profile/<username>')
 def profile(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
+    if user != current_user:
+        abort(404)
+
     page = int(request.args.get('page', 1))
     paginated = db.paginate(user.posts.select().order_by(Post.id.desc()), page=page, per_page=g.per_page)
     return render_template('profile.html', title=_('Profile'), user=user, paginated=paginated)
