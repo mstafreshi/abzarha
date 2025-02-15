@@ -22,6 +22,7 @@ def login():
                 )
             )
         )
+        print(form.password.data)
         if not user or not user.check_password(form.password.data):
             flash(_('Invalid username(email) or password'))
             return redirect(url_for('.login'))
